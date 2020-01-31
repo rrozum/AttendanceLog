@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Zend\ServiceManager\ServiceManager;
-
 // Load configuration
 $config = require __DIR__ . '/config.php';
 

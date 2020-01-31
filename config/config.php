@@ -19,11 +19,14 @@ $aggregator = new ConfigAggregator([
     \Zend\HttpHandlerRunner\ConfigProvider::class,
     \Zend\Expressive\Router\FastRouteRouter\ConfigProvider::class,
     // Include cache configuration
-    new ArrayProvider($cacheConfig),
+//    new ArrayProvider($cacheConfig),
 
     \Zend\Expressive\Helper\ConfigProvider::class,
     \Zend\Expressive\ConfigProvider::class,
     \Zend\Expressive\Router\ConfigProvider::class,
+
+//    \System\ConfigProvider::class,
+    \Api\ConfigProvider::class,
 
     // Swoole config to overwrite some services (if installed)
     class_exists(\Zend\Expressive\Swoole\ConfigProvider::class)
@@ -40,5 +43,4 @@ $aggregator = new ConfigAggregator([
     // Load development config if it exists
     new PhpFileProvider(realpath(__DIR__) . '/development.config.php'),
 ], $cacheConfig['config_cache_path']);
-
 return $aggregator->getMergedConfig();

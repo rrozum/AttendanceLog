@@ -20,4 +20,12 @@ use Zend\Expressive\MiddlewareFactory;
  * $app->route('/contact', App\Handler\ContactHandler::class, ['GET', 'POST', ...], 'contact');
  */
 return function (Application $app, MiddlewareFactory $factory, ContainerInterface $container) : void {
+    /**
+     * Подключаемые пути
+     */
+    foreach (new DirectoryIterator(__DIR__ . '/routes') as $info) {
+        if ($info->isFile()) {
+            require_once $info->getPathname();
+        }
+    }
 };

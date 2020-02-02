@@ -8,10 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
 {
+    protected $table = 'student';
+
     protected $primaryKey = 'id';
 
     protected $dates = [
         'birth',
+        'created_at',
+        'updated_at',
     ];
 
     protected $casts = [

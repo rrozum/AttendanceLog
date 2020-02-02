@@ -29,6 +29,9 @@ class AddTableStudent extends Migration
                 $table->char('type', 50)->nullable();
                 $table->unsignedInteger('course_id');
                 $table->unsignedInteger('school_id');
+                $table->timestamp('created_at')->useCurrent();
+                $table->timestamp('updated_at')
+                    ->default($connection->raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             }
         );
     }

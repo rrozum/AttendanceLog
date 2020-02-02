@@ -21,7 +21,7 @@ class AddTableStudent extends Migration
         $schema->create(
             self::TABLE,
             function (\Illuminate\Database\Schema\Blueprint $table) use ($connection) {
-                $table->unsignedInteger('id')->primary();
+                $table->unsignedInteger('id')->autoIncrement();
                 $table->char('name', 250);
                 $table->timestamp('birth');
                 $table->char('phone', 15)->nullable();

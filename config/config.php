@@ -27,6 +27,7 @@ $aggregator = new ConfigAggregator([
 
 //    \System\ConfigProvider::class,
     \Api\ConfigProvider::class,
+    \Service\ConfigProvider::class,
 
     // Swoole config to overwrite some services (if installed)
     class_exists(\Zend\Expressive\Swoole\ConfigProvider::class)

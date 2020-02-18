@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Service;
 
+use Service\Student\ListService;
 use System\AbstractFactory\ReflectionBasedAbstractFactory;
 
 class ConfigProvider
@@ -18,8 +19,8 @@ class ConfigProvider
     {
         return [
             'factories' => [
+                ListService::class => ReflectionBasedAbstractFactory::class,
             ],
-            'params' => [],
         ];
     }
 }

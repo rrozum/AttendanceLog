@@ -10,8 +10,6 @@ class Student extends Model
 {
     protected $table = 'student';
 
-    protected $primaryKey = 'id';
-
     protected $dates = [
         'birth',
         'created_at',
@@ -20,6 +18,7 @@ class Student extends Model
 
     protected $casts = [
         'id' => 'integer',
+        'deleted' => 'bool',
     ];
 
     protected $fillable = [

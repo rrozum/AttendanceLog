@@ -27,8 +27,9 @@ class Student extends Model
         'birth',
         'phone',
         'email',
-        'type',
-        'course_id',
         'school_id',
+        'course_id',
+        'program_id',
+        'deleted'
     ];
 }

@@ -5,6 +5,7 @@ namespace Api;
 
 
 use Api\Handler\Ping;
+use Api\Handler\Student\ListHandler;
 use Api\Handler\StudentAdd;
 use Api\Handler\StudentList;
 use System\AbstractFactory\ReflectionBasedAbstractFactory;
@@ -23,6 +24,7 @@ class ConfigProvider
         return [
             'factories' => [
                 Ping::class => ReflectionBasedAbstractFactory::class,
+                ListHandler::class => ReflectionBasedAbstractFactory::class,
             ],
             'params' => [],
         ];

@@ -67,7 +67,8 @@
         "psr-4": {
             "Api\\": "src/Api/src/",
             "System\\": "src/System/src",
-            "App\\": "src/App/src"
+            "App\\": "src/App/src",
+            "Service\\": "src/Service/src"
         }
     },
     "autoload-dev": {

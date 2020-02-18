@@ -1,12 +1,8 @@
 <?php
 declare(strict_types=1);
 
-namespace Api;
+namespace Service;
 
-
-use Api\Handler\Ping;
-use Api\Handler\StudentAdd;
-use Api\Handler\StudentList;
 use System\AbstractFactory\ReflectionBasedAbstractFactory;
 
 class ConfigProvider
@@ -22,7 +18,6 @@ class ConfigProvider
     {
         return [
             'factories' => [
-                Ping::class => ReflectionBasedAbstractFactory::class,
             ],
             'params' => [],
         ];

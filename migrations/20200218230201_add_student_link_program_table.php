@@ -2,9 +2,9 @@
 
 use Phpmig\Migration\Migration;
 
-class AddStudentTable extends Migration
+class AddStudentLinkProgramTable extends Migration
 {
-    const TABLE = 'student';
+    const TABLE = 'student_link_program';
 
     /**
      * Do the migration
@@ -20,17 +20,11 @@ class AddStudentTable extends Migration
 
         $schema->create(
             self::TABLE,
-            function (\Illuminate\Database\Schema\Blueprint $table) use ($connection) {
+            function (\Illuminate\Database\Schema\Blueprint $table) {
                 $table->unsignedInteger('id', true);
-                $table->char('name', 255);
-                $table->timestamp('birth')->nullable();
-                $table->char('phone', 15)->nullable();
-                $table->char('email', 255)->nullable();
-                $table->unsignedInteger('school_id');
-                $table->tinyInteger('deleted')->default(false);
-                $table->timestamp('created_at')->useCurrent();
-                $table->timestamp('updated_at')
-                    ->default($connection->raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+                $table->unsignedInteger('student_id');
+                $table->unsignedInteger('program_id');
+                $table->index(['student_id', 'program_id'], 'student_program_ids');
             }
         );
     }

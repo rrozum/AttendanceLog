@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Api\Handler;
+namespace Api\Handler\Program;
 
 
-use Carbon\Carbon;
+use App\Collection\ProgramCollection;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -12,8 +12,11 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Zend\Expressive\Hal\HalResponseFactory;
 use Zend\Expressive\Hal\ResourceGenerator;
 
-class Ping implements RequestHandlerInterface
+class ProgramListHandler implements RequestHandlerInterface
 {
+    const MAX_LIMIT = 500;
+    const START_OFFSET = 0;
+
     protected $generator;
     protected $halResponseFactory;
 
@@ -27,17 +30,22 @@ class Ping implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $responseArray = [
-            'server_time' => Carbon::now(),
-            'server_status' => 'ok',
-        ];
+        $queryParams = $request->getQueryParams();
 
-        $resource = $this->generator->fromArray($responseArray);
+        $limit = isset($queryParams['limit'])
+            ? (int)$queryParams['limit']
+            : self::MAX_LIMIT;
+
+        $offset = isset($queryParams['offset'])
+            ? (int)$queryParams['offset']
+            : self::START_OFFSET;
+
+        $programList = ProgramCollection::getProgramList($offset, $limit);
+
+        $resource = $this->generator->fromArray(['programs' => $programList]);
 
         return $this->halResponseFactory
             ->createResponse($request, $resource)
-            ->withStatus(StatusCodeInterface::STATUS_OK)
-            ->withHeader('Content-Type', 'application/json');
+            ->withStatus(StatusCodeInterface::STATUS_OK);
     }
-
 }

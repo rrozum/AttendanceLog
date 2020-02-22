@@ -3,37 +3,47 @@ declare(strict_types=1);
 
 namespace Api\Handler\Student;
 
+use App\Collection\StudentsCollection;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Service\Student\ListService;
 use Zend\Expressive\Hal\HalResponseFactory;
 use Zend\Expressive\Hal\ResourceGenerator;
 
 
-class ListHandler implements RequestHandlerInterface
+class StudentListHandler implements RequestHandlerInterface
 {
+    const MAX_LIMIT = 500;
+    const START_OFFSET = 0;
+
     protected $generator;
     protected $halResponseFactory;
-    protected $studentListService;
 
     public function __construct(
         ResourceGenerator $generator,
-        HalResponseFactory $halResponseFactory,
-        ListService $studentListService
+        HalResponseFactory $halResponseFactory
     ) {
         $this->generator = $generator;
         $this->halResponseFactory = $halResponseFactory;
-        $this->studentListService = $studentListService;
     }
 
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $allStudents = $this->studentListService->getAllStudentsAsArray();
+        $queryParams = $request->getQueryParams();
 
-        $resource = $this->generator->fromArray(['students' => $allStudents]);
+        $limit = isset($queryParams['limit'])
+            ? (int)$queryParams['limit']
+            : self::MAX_LIMIT;
+
+        $offset = isset($queryParams['offset'])
+            ? (int)$queryParams['offset']
+            : self::START_OFFSET;
+
+        $studentList = StudentsCollection::getStudentList($offset, $limit);
+
+        $resource = $this->generator->fromArray(['students' => $studentList]);
 
         return $this->halResponseFactory
             ->createResponse($request, $resource)

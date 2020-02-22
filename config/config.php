@@ -25,7 +25,7 @@ $aggregator = new ConfigAggregator([
     \Zend\Expressive\ConfigProvider::class,
     \Zend\Expressive\Router\ConfigProvider::class,
 
-//    \System\ConfigProvider::class,
+    \System\ConfigProvider::class,
     \Api\ConfigProvider::class,
     \Service\ConfigProvider::class,
 

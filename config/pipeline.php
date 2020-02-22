@@ -14,6 +14,7 @@ use Zend\Expressive\Router\Middleware\ImplicitOptionsMiddleware;
 use Zend\Expressive\Router\Middleware\MethodNotAllowedMiddleware;
 use Zend\Expressive\Router\Middleware\RouteMiddleware;
 use Zend\Stratigility\Middleware\ErrorHandler;
+use Zend\ProblemDetails\ProblemDetailsMiddleware;
 
 /**
  * Setup middleware pipeline:
@@ -23,6 +24,7 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     // all Exceptions.
     $app->pipe(ErrorHandler::class);
     $app->pipe(ServerUrlMiddleware::class);
+    $app->pipe(ProblemDetailsMiddleware::class);
 
     // Pipe more middleware here that you want to execute on every request:
     // - bootstrapping

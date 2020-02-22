@@ -8,3 +8,9 @@ $app->get(
     \Api\Handler\Program\ProgramListHandler::class,
     'program.list'
 );
+
+$app->post(
+    '/program/add',
+    \Api\Handler\Program\ProgramAddHandler::class,
+    'program.add'
+);

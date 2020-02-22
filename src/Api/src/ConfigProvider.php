@@ -5,6 +5,7 @@ namespace Api;
 
 
 use Api\Handler\Ping;
+use Api\Handler\Program\ProgramAddHandler;
 use Api\Handler\Program\ProgramListHandler;
 use Api\Handler\Student\StudentListHandler;
 use Api\Handler\StudentAdd;
@@ -27,6 +28,7 @@ class ConfigProvider
                 Ping::class => ReflectionBasedAbstractFactory::class,
                 StudentListHandler::class => ReflectionBasedAbstractFactory::class,
                 ProgramListHandler::class => ReflectionBasedAbstractFactory::class,
+                ProgramAddHandler::class => ReflectionBasedAbstractFactory::class,
             ],
             'params' => [],
         ];

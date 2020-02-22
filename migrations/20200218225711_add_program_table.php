@@ -23,10 +23,16 @@ class AddProgramTable extends Migration
             function (\Illuminate\Database\Schema\Blueprint $table) use ($connection) {
                 $table->unsignedInteger('id', true);
                 $table->char('name', 255);
-                $table->char('department', 255);
+                $table->char('department_id', 255);
                 $table->timestamp('created_at')->useCurrent();
                 $table->timestamp('updated_at')
                     ->default($connection->raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+
+                $table->index(
+                    ['name', 'department_id'],
+                    'name_and_department_id_index'
+                );
+
             }
         );
     }

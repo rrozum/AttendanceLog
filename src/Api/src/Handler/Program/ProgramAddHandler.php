@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace Api\Handler\Program;
 
 
+use Api\Handler\Exception\RecordExistsException;
 use Api\Handler\Exception\WrongParamsException;
+use App\Entity\Program;
 use Fig\Http\Message\StatusCodeInterface;
 use http\Exception\RuntimeException;
 use Psr\Http\Message\ResponseInterface;
@@ -31,11 +33,29 @@ class ProgramAddHandler implements RequestHandlerInterface
     {
         $parsedBody = $request->getParsedBody();
         $name = $parsedBody['name'] ?? null;
-        $department = $parsedBody['department'] ?? null;
+        $departmentId = $parsedBody['department_id'] ?? null;
 
         if (empty($name)) {
             throw WrongParamsException::create('name');
         }
+
+        if (empty($departmentId)) {
+            throw WrongParamsException::create('department_id');
+        }
+
+        $program = Program::query()
+            ->where('name', '=', $name)
+            ->where('department_id', '=', $departmentId)
+            ->first();
+
+        if (!empty($program)) {
+            throw RecordExistsException::create($program->getAttribute('name'));
+        }
+
+        $program = new Program();
+        $program->setAttribute('name', $name);
+        $program->setAttribute('department_id', $departmentId);
+        $program->save();
 
         $resource = $this->generator->fromArray(['programs' => 'ok']);
 

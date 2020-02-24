@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Api;
 
 
+use Api\Handler\Course\CourseAddHandler;
+use Api\Handler\Course\CourseListHandler;
 use Api\Handler\Department\DepartmentAddHandler;
 use Api\Handler\Ping;
 use Api\Handler\Program\ProgramAddHandler;
@@ -37,6 +39,10 @@ class ConfigProvider
                 // Program
                 ProgramListHandler::class => ReflectionBasedAbstractFactory::class,
                 ProgramAddHandler::class => ReflectionBasedAbstractFactory::class,
+
+                // Course
+                CourseListHandler::class => ReflectionBasedAbstractFactory::class,
+                CourseAddHandler::class => ReflectionBasedAbstractFactory::class,
             ],
             'params' => [],
         ];

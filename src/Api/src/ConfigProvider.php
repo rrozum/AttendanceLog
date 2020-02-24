@@ -13,6 +13,8 @@ use Api\Handler\Ping;
 use Api\Handler\Program\ProgramAddHandler;
 use Api\Handler\Department\DepartmentListHandler;
 use Api\Handler\Program\ProgramListHandler;
+use Api\Handler\School\SchoolAddHandler;
+use Api\Handler\School\SchoolListHandler;
 use Api\Handler\Student\StudentAddHandler;
 use Api\Handler\Student\StudentListHandler;
 use System\AbstractFactory\ReflectionBasedAbstractFactory;
@@ -51,6 +53,10 @@ class ConfigProvider
                 // Attendance
                 AttendanceListHandler::class => ReflectionBasedAbstractFactory::class,
                 AttendanceAddHandler::class => ReflectionBasedAbstractFactory::class,
+
+                // School
+                SchoolListHandler::class => ReflectionBasedAbstractFactory::class,
+                SchoolAddHandler::class => ReflectionBasedAbstractFactory::class,
             ],
             'params' => [],
         ];

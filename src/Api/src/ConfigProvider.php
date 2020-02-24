@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Api;
 
 
+use Api\Handler\Attendance\AttendanceAddHandler;
+use Api\Handler\Attendance\AttendanceListHandler;
 use Api\Handler\Course\CourseAddHandler;
 use Api\Handler\Course\CourseListHandler;
 use Api\Handler\Department\DepartmentAddHandler;
@@ -43,6 +45,10 @@ class ConfigProvider
                 // Course
                 CourseListHandler::class => ReflectionBasedAbstractFactory::class,
                 CourseAddHandler::class => ReflectionBasedAbstractFactory::class,
+
+                // Attendance
+                AttendanceListHandler::class => ReflectionBasedAbstractFactory::class,
+                AttendanceAddHandler::class => ReflectionBasedAbstractFactory::class,
             ],
             'params' => [],
         ];

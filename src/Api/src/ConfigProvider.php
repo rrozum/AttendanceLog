@@ -13,6 +13,7 @@ use Api\Handler\Ping;
 use Api\Handler\Program\ProgramAddHandler;
 use Api\Handler\Department\DepartmentListHandler;
 use Api\Handler\Program\ProgramListHandler;
+use Api\Handler\Student\StudentAddHandler;
 use Api\Handler\Student\StudentListHandler;
 use System\AbstractFactory\ReflectionBasedAbstractFactory;
 
@@ -33,6 +34,7 @@ class ConfigProvider
 
                 // Student
                 StudentListHandler::class => ReflectionBasedAbstractFactory::class,
+                StudentAddHandler::class => ReflectionBasedAbstractFactory::class,
 
                 // Department
                 DepartmentListHandler::class => ReflectionBasedAbstractFactory::class,

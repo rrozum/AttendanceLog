@@ -49,13 +49,11 @@ class AttendanceAddHandler implements RequestHandlerInterface
 
         $date = Carbon::createFromTimestampUTC($date)
             ->format('Y-m-d H:i:s');
-//die(var_dump($date));
+
         $attendanceRow = Attendance::query()
             ->where('student_id', '=', $studentId)
             ->where('date', '=', $date)
             ->first();
-
-//        die(var_dump($attendanceRow->toArray()));
 
         if (empty($attendanceRow)) {
             $attendanceRow = new Attendance();

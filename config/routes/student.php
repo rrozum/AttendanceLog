@@ -8,3 +8,9 @@ $app->get(
     \Api\Handler\Student\StudentListHandler::class,
     'student.list'
 );
+
+$app->post(
+    '/student/add',
+    \Api\Handler\Student\StudentAddHandler::class,
+    'student.add'
+);

@@ -6,9 +6,10 @@ namespace Api\Handler\Program;
 
 use Api\Handler\Exception\RecordExistsException;
 use Api\Handler\Exception\WrongParamsException;
+use App\Collection\DepartmentCollection;
 use App\Entity\Program;
+use App\Entity\ProgramLinkDepartment;
 use Fig\Http\Message\StatusCodeInterface;
-use http\Exception\RuntimeException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -31,21 +32,28 @@ class ProgramAddHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $parsedBody = $request->getParsedBody();
+        $contents = $request->getBody()->getContents();
+        $parsedBody = json_decode($contents, true);
         $name = $parsedBody['name'] ?? null;
-        $departmentId = $parsedBody['department_id'] ?? null;
+        $departmentIds = $parsedBody['department_ids'] ?? null;
 
         if (empty($name)) {
             throw WrongParamsException::create('name');
         }
 
-        if (empty($departmentId)) {
-            throw WrongParamsException::create('department_id');
+        if (empty($departmentIds)) {
+            throw WrongParamsException::create('department_ids');
+        }
+
+        $departments = DepartmentCollection::getDepartmentsByIds($departmentIds)
+            ->toArray();
+
+        if (count($departmentIds) > count($departments)) {
+            throw WrongParamsException::create('department_ids');
         }
 
         $program = Program::query()
             ->where('name', '=', $name)
-            ->where('department_id', '=', $departmentId)
             ->first();
 
         if (!empty($program)) {
@@ -54,10 +62,29 @@ class ProgramAddHandler implements RequestHandlerInterface
 
         $program = new Program();
         $program->setAttribute('name', $name);
-        $program->setAttribute('department_id', $departmentId);
         $program->save();
 
-        $resource = $this->generator->fromArray(['programs' => 'ok']);
+        foreach ($departmentIds as $departmentId) {
+            $programLinkDepartment = new ProgramLinkDepartment();
+            $programLinkDepartment->setAttribute('program_id', $program->getAttribute('id'));
+            $programLinkDepartment->setAttribute('department_id', (int)$departmentId);
+            $programLinkDepartment->save();
+        }
+
+        $departmentElements = [];
+        foreach ($departments as $department) {
+            $departmentId = $department['id'];
+            $departmentName = $department['name'];
+
+            $departmentElements[$departmentId] = $departmentName;
+        }
+        $programResource = $this->generator->fromArray([
+            'id' => $program->getAttribute('id'),
+            'name' => $program->getAttribute('name'),
+            'department_resource' => $departmentElements
+        ]);
+
+        $resource = $this->generator->fromArray(['status' => 'success'])->embed('program_resource', $programResource);
 
         return $this->halResponseFactory
             ->createResponse($request, $resource)

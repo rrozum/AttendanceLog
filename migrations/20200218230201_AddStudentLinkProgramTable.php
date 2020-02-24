@@ -20,10 +20,13 @@ class AddStudentLinkProgramTable extends Migration
 
         $schema->create(
             self::TABLE,
-            function (\Illuminate\Database\Schema\Blueprint $table) {
+            function (\Illuminate\Database\Schema\Blueprint $table) use ($connection) {
                 $table->unsignedInteger('id', true);
                 $table->unsignedInteger('student_id');
                 $table->unsignedInteger('program_id');
+                $table->timestamp('created_at')->useCurrent();
+                $table->timestamp('updated_at')
+                    ->default($connection->raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
                 $table->index(['student_id', 'program_id'], 'student_program_ids');
             }
         );

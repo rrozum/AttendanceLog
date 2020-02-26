@@ -10,8 +10,8 @@ $container['config'] = $config;
 
 $container['db'] = function ($c) {
     $capsule = new Capsule();
-    $capsule->addConnection($c['config']['database']['log_app'], 'log_app');
-    $capsule->getDatabaseManager()->setDefaultConnection('log_app');
+    $capsule->addConnection($c['config']['database']['attendance'], 'attendance');
+    $capsule->getDatabaseManager()->setDefaultConnection('attendance');
     $capsule->setAsGlobal();
     $capsule->bootEloquent();
 

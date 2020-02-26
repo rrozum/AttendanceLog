@@ -16,8 +16,8 @@ $dependencies['services']['config'] = $config;
 $container = new ServiceManager($dependencies);
 
 $capsule = new Manager();
-$capsule->addConnection($config['database']['log_app'], 'log_app');
-$capsule->getDatabaseManager()->setDefaultConnection('log_app');
+$capsule->addConnection($config['database']['attendance'], 'attendance');
+$capsule->getDatabaseManager()->setDefaultConnection('attendance');
 $capsule->setEventDispatcher(new Dispatcher());
 $capsule->bootEloquent();
 $container->setService(Manager::class, $capsule);

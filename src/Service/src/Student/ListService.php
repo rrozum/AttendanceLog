@@ -56,7 +56,7 @@ class ListService
             if (!empty($studentIds)) {
                 $studentIdsBySchool = $studentIdsBySchool->whereIn('id', $studentIds);
             }
-                $studentIdsBySchool = $studentIdsBySchool->get('id');
+            $studentIdsBySchool = $studentIdsBySchool->get('id');
 
             if (!empty($studentIdsBySchool->toArray())) {
                 $studentIdsBySchool = $studentIdsBySchool->implode('id', ',');
@@ -109,12 +109,28 @@ class ListService
         }
 
         if (empty($studentIds) && $filterCheck === false) {
-            $students = Student::all()->toArray();
+            $students = Student::all();
+
+            $studentIds = $students->implode('id', ',');
+            $studentIds = explode(',', $studentIds);
+
+            $students = $students->toArray();
+
+            $attendance = Attendance::query()->whereIn('student_id', $studentIds)->get()->toArray();
         } else {
+            $attendance = Attendance::query()->whereIn('student_id', $studentIds)->get()->toArray();
             $students = Student::query()
                 ->whereIn('id', $studentIds)
                 ->get()
                 ->toArray();
+        }
+
+        foreach ($students as &$student) {
+            foreach ($attendance as $attend) {
+                if ($attend['student_id'] === $student['id']) {
+                    $student['attendance'] = $attend['attendance'];
+                }
+            }
         }
 
         return $students;

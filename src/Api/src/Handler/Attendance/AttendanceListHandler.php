@@ -5,6 +5,7 @@ namespace Api\Handler\Attendance;
 
 
 use App\Collection\AttendanceCollection;
+use App\Entity\Attendance;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -40,9 +41,20 @@ class AttendanceListHandler implements RequestHandlerInterface
             ? (int)$queryParams['offset']
             : self::START_OFFSET;
 
-        $departmentList = AttendanceCollection::getAttendanceList($offset, $limit);
+        $studentIds = isset($queryParams['student_id'])
+            ? (array)$queryParams['student_id']
+            : null;
 
-        $resource = $this->generator->fromArray(['courses' => $departmentList]);
+        if (!empty($studentIds)) {
+            $attendanceList = Attendance::query()
+                ->whereIn('student_id', $studentIds)
+                ->get();
+        } else {
+            $attendanceList = AttendanceCollection::getAttendanceList($offset, $limit);
+        }
+
+
+        $resource = $this->generator->fromArray(['attendance' => $attendanceList]);
 
         return $this->halResponseFactory
             ->createResponse($request, $resource)

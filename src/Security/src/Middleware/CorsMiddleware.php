@@ -12,7 +12,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 class CorsMiddleware implements MiddlewareInterface
 {
     protected $origins = [
-        'null',
+        'localhost',
+        'rrozum.ru',
     ];
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate): ResponseInterface

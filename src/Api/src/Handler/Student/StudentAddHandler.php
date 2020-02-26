@@ -5,9 +5,14 @@ namespace Api\Handler\Student;
 
 
 use Api\Handler\Exception\WrongParamsException;
+use App\Entity\Course;
+use App\Entity\Program;
 use App\Entity\Student;
+use App\Entity\StudentLinkCourse;
+use App\Entity\StudentLinkProgram;
 use Carbon\Carbon;
 use Fig\Http\Message\StatusCodeInterface;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -71,6 +76,45 @@ class StudentAddHandler implements RequestHandlerInterface
         $student->save();
 
         $courseResource = $this->generator->fromArray(['id' => $student->getAttribute('id')]);
+
+        if (!empty($parsedBody['program_id'])) {
+            $programId = (int)$parsedBody['program_id'];
+
+            $program = Program::query()->where('id', '=', $programId)->first();
+
+            if (!empty($program)) {
+                $studentLinkProgram = new StudentLinkProgram();
+                $studentLinkProgram->setAttribute('student_id', $student->getAttribute('id'));
+                $studentLinkProgram->setAttribute('program_id', $program->getAttribute('id'));
+            } else {
+                $student->delete();
+                throw WrongParamsException::create('program_id');
+            }
+        }
+
+        if (!empty($parsedBody['course_id'])) {
+            $courseId = (int)$parsedBody['course_id'];
+
+            $course = Course::query()->where('id', '=', $courseId)->first();
+
+            if (!empty($course)) {
+                $studentLinkCourse = new StudentLinkCourse();
+                $studentLinkCourse->setAttribute('student_id', $student->getAttribute('id'));
+                $studentLinkCourse->setAttribute('course_id', $course->getAttribute('id'));
+            } else {
+                $student->delete();
+                throw WrongParamsException::create('course_id');
+            }
+        }
+
+        // Если выше все отработало - сохраняем модели в бд
+        if (!empty($studentLinkProgram)) {
+            $studentLinkProgram->save();
+        }
+
+        if (!empty($studentLinkCourse)) {
+            $studentLinkCourse->save();
+        }
 
         $resource = $this->generator
             ->fromArray(['status' => 'success'])
